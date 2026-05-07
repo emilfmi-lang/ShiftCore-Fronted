@@ -350,20 +350,25 @@ function Index() {
 
       {stage === "forgiven" && (
         <div
-          className="relative z-10 w-full max-w-xl rounded-3xl bg-yellow-100 cartoon-card p-10 md:p-12 text-center"
-          style={{ animation: "pop 0.7s ease-out" }}
+          className="absolute z-10 left-1/2 rounded-3xl bg-yellow-100 cartoon-card px-6 py-4 text-center"
+          style={{
+            top: "6%",
+            transform: "translateX(-50%)",
+            animation: "shrinkUp 1s ease-out forwards",
+            maxWidth: "360px",
+          }}
         >
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-2">
             <Heart
-              className="text-rose-600 fill-rose-500 drop-shadow-xl"
-              size={110}
+              className="text-rose-600 fill-rose-500"
+              size={36}
               style={{ animation: "beat 0.9s ease-in-out infinite" }}
             />
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-rose-700 mb-4" style={{ textShadow: "3px 3px 0 #fff" }}>
+          <h1 className="text-xl md:text-2xl font-black text-rose-700 mb-1" style={{ textShadow: "2px 2px 0 #fff" }}>
             TƏŞƏKKÜR EDİRƏM ❤️
           </h1>
-          <p className="text-xl text-purple-900 leading-relaxed font-bold">
+          <p className="text-sm text-purple-900 leading-snug font-bold">
             Səni dünyalar qədər sevirəm. Bir daha səni heç vaxt üzməyəcəm. 💕
           </p>
         </div>
