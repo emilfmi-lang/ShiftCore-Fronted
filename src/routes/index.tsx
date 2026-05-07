@@ -109,50 +109,95 @@ function Index() {
         }} />
 
         {/* Couple silhouettes */}
-        <div className="absolute bottom-0 left-4 md:left-12 pointer-events-none" style={{ animation: "sway 4s ease-in-out infinite" }}>
-          <svg width="140" height="240" viewBox="0 0 140 240" style={{ filter: "drop-shadow(8px 8px 0 rgba(0,0,0,0.25))" }}>
+        <div
+          className="absolute bottom-0 pointer-events-none"
+          style={{
+            left: stage === "forgiven" ? "calc(50% - 150px)" : "1rem",
+            transition: "left 1.6s cubic-bezier(0.6, 0.2, 0.2, 1)",
+            animation: stage === "forgiven" ? "none" : "sway 4s ease-in-out infinite",
+          }}
+        >
+          <svg width="160" height="240" viewBox="0 0 160 240" style={{ filter: "drop-shadow(8px 8px 0 rgba(0,0,0,0.25))" }}>
             <ellipse cx="70" cy="235" rx="50" ry="6" fill="rgba(0,0,0,0.2)" />
             <rect x="55" y="160" width="14" height="70" rx="6" fill="#1e3a8a" stroke="#0f172a" strokeWidth="3" />
             <rect x="71" y="160" width="14" height="70" rx="6" fill="#1e3a8a" stroke="#0f172a" strokeWidth="3" />
             <path d="M40 100 Q40 85 55 80 L85 80 Q100 85 100 100 L100 165 L40 165 Z" fill="#3b82f6" stroke="#0f172a" strokeWidth="3" />
-            <path d="M100 110 Q120 115 125 130" stroke="#fde68a" strokeWidth="10" strokeLinecap="round" fill="none" />
-            <path d="M100 110 Q120 115 125 130" stroke="#0f172a" strokeWidth="3" fill="none" />
+            {/* Right arm — extends when hugging */}
+            {stage === "forgiven" ? (
+              <path d="M100 105 Q140 100 158 115 L158 130 Q140 122 100 125 Z" fill="#3b82f6" stroke="#0f172a" strokeWidth="3" />
+            ) : (
+              <>
+                <path d="M100 110 Q120 115 125 130" stroke="#fde68a" strokeWidth="10" strokeLinecap="round" fill="none" />
+                <path d="M100 110 Q120 115 125 130" stroke="#0f172a" strokeWidth="3" fill="none" />
+              </>
+            )}
             <circle cx="70" cy="55" r="28" fill="#fde68a" stroke="#0f172a" strokeWidth="3" />
             <path d="M44 50 Q45 28 70 25 Q95 28 96 50 Q90 38 70 38 Q50 38 44 50 Z" fill="#3f2a14" stroke="#0f172a" strokeWidth="3" />
             <circle cx="62" cy="55" r="3" fill="#0f172a" />
             <circle cx="78" cy="55" r="3" fill="#0f172a" />
-            <path d="M60 68 Q70 76 80 68" stroke="#0f172a" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+            {stage === "forgiven" ? (
+              <path d="M58 66 Q70 80 82 66" stroke="#0f172a" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+            ) : (
+              <path d="M60 68 Q70 76 80 68" stroke="#0f172a" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+            )}
             <circle cx="56" cy="64" r="3" fill="#fb7185" opacity="0.7" />
             <circle cx="84" cy="64" r="3" fill="#fb7185" opacity="0.7" />
           </svg>
         </div>
 
-        <div className="absolute bottom-0 right-4 md:right-12 pointer-events-none" style={{ animation: "sway2 4s ease-in-out infinite" }}>
-          <svg width="140" height="240" viewBox="0 0 140 240" style={{ filter: "drop-shadow(-8px 8px 0 rgba(0,0,0,0.25))" }}>
+        <div
+          className="absolute bottom-0 pointer-events-none"
+          style={{
+            left: stage === "forgiven" ? "calc(50% - 10px)" : "auto",
+            right: stage === "forgiven" ? "auto" : "1rem",
+            transition: "left 1.6s cubic-bezier(0.6, 0.2, 0.2, 1), right 1.6s cubic-bezier(0.6, 0.2, 0.2, 1)",
+            animation: stage === "forgiven" ? "none" : "sway2 4s ease-in-out infinite",
+          }}
+        >
+          <svg width="160" height="240" viewBox="0 0 160 240" style={{ filter: "drop-shadow(-8px 8px 0 rgba(0,0,0,0.25))" }}>
             <ellipse cx="70" cy="235" rx="50" ry="6" fill="rgba(0,0,0,0.2)" />
             <rect x="58" y="160" width="11" height="70" rx="5" fill="#fce7f3" stroke="#0f172a" strokeWidth="3" />
             <rect x="71" y="160" width="11" height="70" rx="5" fill="#fce7f3" stroke="#0f172a" strokeWidth="3" />
             <path d="M42 95 Q42 82 55 78 L85 78 Q98 82 98 95 L110 170 L30 170 Z" fill="#ec4899" stroke="#0f172a" strokeWidth="3" />
-            <path d="M42 110 Q22 115 17 130" stroke="#fde68a" strokeWidth="10" strokeLinecap="round" fill="none" />
-            <path d="M42 110 Q22 115 17 130" stroke="#0f172a" strokeWidth="3" fill="none" />
+            {/* Left arm — extends when hugging */}
+            {stage === "forgiven" ? (
+              <path d="M42 105 Q2 100 -16 115 L-16 130 Q2 122 42 125 Z" fill="#ec4899" stroke="#0f172a" strokeWidth="3" />
+            ) : (
+              <>
+                <path d="M42 110 Q22 115 17 130" stroke="#fde68a" strokeWidth="10" strokeLinecap="round" fill="none" />
+                <path d="M42 110 Q22 115 17 130" stroke="#0f172a" strokeWidth="3" fill="none" />
+              </>
+            )}
             <circle cx="70" cy="55" r="28" fill="#fde68a" stroke="#0f172a" strokeWidth="3" />
             <path d="M42 55 Q40 25 70 22 Q100 25 98 55 L100 95 Q90 80 88 60 Q70 50 52 60 Q50 80 40 95 Z" fill="#7c2d12" stroke="#0f172a" strokeWidth="3" />
             <circle cx="62" cy="56" r="3" fill="#0f172a" />
             <circle cx="78" cy="56" r="3" fill="#0f172a" />
-            <path d="M60 68 Q70 76 80 68" stroke="#0f172a" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+            {stage === "forgiven" ? (
+              <path d="M58 66 Q70 80 82 66" stroke="#0f172a" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+            ) : (
+              <path d="M60 68 Q70 76 80 68" stroke="#0f172a" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+            )}
             <circle cx="56" cy="65" r="3.5" fill="#fb7185" opacity="0.8" />
             <circle cx="84" cy="65" r="3.5" fill="#fb7185" opacity="0.8" />
           </svg>
         </div>
 
         {/* Heart between them */}
-        <div className="absolute pointer-events-none" style={{
-          bottom: "180px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          animation: "pulseHeart 1.5s ease-in-out infinite",
-        }}>
-          <Heart className="text-rose-500 fill-rose-500" size={42} style={{ filter: "drop-shadow(3px 3px 0 #0f172a)" }} />
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            bottom: stage === "forgiven" ? "230px" : "180px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            animation: "pulseHeart 1.5s ease-in-out infinite",
+            transition: "bottom 1.6s ease",
+          }}
+        >
+          <Heart
+            className="text-rose-500 fill-rose-500"
+            size={stage === "forgiven" ? 56 : 42}
+            style={{ filter: "drop-shadow(3px 3px 0 #0f172a)", transition: "all 1.6s ease" }}
+          />
         </div>
       </div>
 
@@ -216,6 +261,11 @@ function Index() {
         @keyframes pulseHeart {
           0%, 100% { transform: scale(1); opacity: 0.9; }
           50% { transform: scale(1.2); opacity: 1; }
+        }
+        @keyframes shrinkUp {
+          0% { transform: translate(-50%, 60vh) scale(2.2); opacity: 0; }
+          40% { transform: translate(-50%, 30vh) scale(1.6); opacity: 1; }
+          100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
         }
       `}</style>
 
@@ -305,20 +355,25 @@ function Index() {
 
       {stage === "forgiven" && (
         <div
-          className="relative z-10 w-full max-w-xl rounded-3xl bg-yellow-100 cartoon-card p-10 md:p-12 text-center"
-          style={{ animation: "pop 0.7s ease-out" }}
+          className="absolute z-10 left-1/2 rounded-3xl bg-yellow-100 cartoon-card px-6 py-4 text-center"
+          style={{
+            top: "6%",
+            transform: "translateX(-50%)",
+            animation: "shrinkUp 1s ease-out forwards",
+            maxWidth: "360px",
+          }}
         >
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-2">
             <Heart
-              className="text-rose-600 fill-rose-500 drop-shadow-xl"
-              size={110}
+              className="text-rose-600 fill-rose-500"
+              size={36}
               style={{ animation: "beat 0.9s ease-in-out infinite" }}
             />
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-rose-700 mb-4" style={{ textShadow: "3px 3px 0 #fff" }}>
+          <h1 className="text-xl md:text-2xl font-black text-rose-700 mb-1" style={{ textShadow: "2px 2px 0 #fff" }}>
             TƏŞƏKKÜR EDİRƏM ❤️
           </h1>
-          <p className="text-xl text-purple-900 leading-relaxed font-bold">
+          <p className="text-sm text-purple-900 leading-snug font-bold">
             Səni dünyalar qədər sevirəm. Bir daha səni heç vaxt üzməyəcəm. 💕
           </p>
         </div>
