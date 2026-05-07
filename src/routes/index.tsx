@@ -262,6 +262,11 @@ function Index() {
           0%, 100% { transform: scale(1); opacity: 0.9; }
           50% { transform: scale(1.2); opacity: 1; }
         }
+        @keyframes shrinkUp {
+          0% { transform: translate(-50%, 60vh) scale(2.2); opacity: 0; }
+          40% { transform: translate(-50%, 30vh) scale(1.6); opacity: 1; }
+          100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+        }
       `}</style>
 
       {stage === "welcome" && (
