@@ -20,7 +20,7 @@ function Index() {
   const [stage, setStage] = useState<Stage>("welcome");
   const [noPos, setNoPos] = useState<{ x: number; y: number } | null>(null);
   const [hearts, setHearts] = useState<Heartlet[]>([]);
-  const noBtnRef = useRef<HTMLButtonElement>(null);
+  const noBtnRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const arr: Heartlet[] = Array.from({ length: 22 }).map((_, i) => ({
