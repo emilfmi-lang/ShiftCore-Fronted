@@ -98,9 +98,62 @@ function Index() {
           />
         ))}
         {/* Cartoon clouds */}
-        <div className="absolute top-10 left-10 w-32 h-16 bg-white rounded-full opacity-80 animate-[drift_20s_linear_infinite]" />
-        <div className="absolute top-32 right-20 w-40 h-20 bg-white rounded-full opacity-70 animate-[drift_25s_linear_infinite_reverse]" />
-        <div className="absolute bottom-20 left-1/4 w-36 h-18 bg-white rounded-full opacity-75 animate-[drift_30s_linear_infinite]" />
+        <div className="absolute top-10 left-10 w-32 h-16 bg-white rounded-full opacity-80 animate-[drift_20s_linear_infinite]" style={{ filter: "drop-shadow(0 6px 0 rgba(0,0,0,0.15))" }} />
+        <div className="absolute top-32 right-20 w-40 h-20 bg-white rounded-full opacity-70 animate-[drift_25s_linear_infinite_reverse]" style={{ filter: "drop-shadow(0 6px 0 rgba(0,0,0,0.15))" }} />
+        <div className="absolute bottom-32 left-1/4 w-36 h-16 bg-white rounded-full opacity-75 animate-[drift_30s_linear_infinite]" style={{ filter: "drop-shadow(0 6px 0 rgba(0,0,0,0.15))" }} />
+
+        {/* Sun */}
+        <div className="absolute top-8 right-8 w-24 h-24 rounded-full" style={{
+          background: "radial-gradient(circle, #fef08a 30%, #fbbf24 70%)",
+          boxShadow: "0 0 60px #fbbf24, 0 0 100px rgba(251,191,36,0.4)",
+        }} />
+
+        {/* Couple silhouettes */}
+        <div className="absolute bottom-0 left-4 md:left-12 pointer-events-none" style={{ animation: "sway 4s ease-in-out infinite" }}>
+          <svg width="140" height="240" viewBox="0 0 140 240" style={{ filter: "drop-shadow(8px 8px 0 rgba(0,0,0,0.25))" }}>
+            <ellipse cx="70" cy="235" rx="50" ry="6" fill="rgba(0,0,0,0.2)" />
+            <rect x="55" y="160" width="14" height="70" rx="6" fill="#1e3a8a" stroke="#0f172a" strokeWidth="3" />
+            <rect x="71" y="160" width="14" height="70" rx="6" fill="#1e3a8a" stroke="#0f172a" strokeWidth="3" />
+            <path d="M40 100 Q40 85 55 80 L85 80 Q100 85 100 100 L100 165 L40 165 Z" fill="#3b82f6" stroke="#0f172a" strokeWidth="3" />
+            <path d="M100 110 Q120 115 125 130" stroke="#fde68a" strokeWidth="10" strokeLinecap="round" fill="none" />
+            <path d="M100 110 Q120 115 125 130" stroke="#0f172a" strokeWidth="3" fill="none" />
+            <circle cx="70" cy="55" r="28" fill="#fde68a" stroke="#0f172a" strokeWidth="3" />
+            <path d="M44 50 Q45 28 70 25 Q95 28 96 50 Q90 38 70 38 Q50 38 44 50 Z" fill="#3f2a14" stroke="#0f172a" strokeWidth="3" />
+            <circle cx="62" cy="55" r="3" fill="#0f172a" />
+            <circle cx="78" cy="55" r="3" fill="#0f172a" />
+            <path d="M60 68 Q70 76 80 68" stroke="#0f172a" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+            <circle cx="56" cy="64" r="3" fill="#fb7185" opacity="0.7" />
+            <circle cx="84" cy="64" r="3" fill="#fb7185" opacity="0.7" />
+          </svg>
+        </div>
+
+        <div className="absolute bottom-0 right-4 md:right-12 pointer-events-none" style={{ animation: "sway2 4s ease-in-out infinite" }}>
+          <svg width="140" height="240" viewBox="0 0 140 240" style={{ filter: "drop-shadow(-8px 8px 0 rgba(0,0,0,0.25))" }}>
+            <ellipse cx="70" cy="235" rx="50" ry="6" fill="rgba(0,0,0,0.2)" />
+            <rect x="58" y="160" width="11" height="70" rx="5" fill="#fce7f3" stroke="#0f172a" strokeWidth="3" />
+            <rect x="71" y="160" width="11" height="70" rx="5" fill="#fce7f3" stroke="#0f172a" strokeWidth="3" />
+            <path d="M42 95 Q42 82 55 78 L85 78 Q98 82 98 95 L110 170 L30 170 Z" fill="#ec4899" stroke="#0f172a" strokeWidth="3" />
+            <path d="M42 110 Q22 115 17 130" stroke="#fde68a" strokeWidth="10" strokeLinecap="round" fill="none" />
+            <path d="M42 110 Q22 115 17 130" stroke="#0f172a" strokeWidth="3" fill="none" />
+            <circle cx="70" cy="55" r="28" fill="#fde68a" stroke="#0f172a" strokeWidth="3" />
+            <path d="M42 55 Q40 25 70 22 Q100 25 98 55 L100 95 Q90 80 88 60 Q70 50 52 60 Q50 80 40 95 Z" fill="#7c2d12" stroke="#0f172a" strokeWidth="3" />
+            <circle cx="62" cy="56" r="3" fill="#0f172a" />
+            <circle cx="78" cy="56" r="3" fill="#0f172a" />
+            <path d="M60 68 Q70 76 80 68" stroke="#0f172a" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+            <circle cx="56" cy="65" r="3.5" fill="#fb7185" opacity="0.8" />
+            <circle cx="84" cy="65" r="3.5" fill="#fb7185" opacity="0.8" />
+          </svg>
+        </div>
+
+        {/* Heart between them */}
+        <div className="absolute pointer-events-none" style={{
+          bottom: "180px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          animation: "pulseHeart 1.5s ease-in-out infinite",
+        }}>
+          <Heart className="text-rose-500 fill-rose-500" size={42} style={{ filter: "drop-shadow(3px 3px 0 #0f172a)" }} />
+        </div>
       </div>
 
       <style>{`
