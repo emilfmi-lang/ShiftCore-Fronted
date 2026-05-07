@@ -137,16 +137,32 @@ function Index() {
         }
         .cartoon-btn {
           border: 3px solid #2d1b3d;
-          box-shadow: 4px 4px 0 #2d1b3d;
+          box-shadow: 4px 4px 0 #2d1b3d, inset 0 -4px 0 rgba(0,0,0,0.15);
           transition: transform 0.15s, box-shadow 0.15s;
         }
         .cartoon-btn:hover {
           transform: translate(-2px, -2px);
-          box-shadow: 6px 6px 0 #2d1b3d;
+          box-shadow: 6px 6px 0 #2d1b3d, inset 0 -4px 0 rgba(0,0,0,0.15);
         }
         .cartoon-btn:active {
           transform: translate(2px, 2px);
-          box-shadow: 2px 2px 0 #2d1b3d;
+          box-shadow: 2px 2px 0 #2d1b3d, inset 0 -4px 0 rgba(0,0,0,0.15);
+        }
+        .no-btn {
+          border: 3px solid #2d1b3d;
+          box-shadow: 4px 4px 0 #2d1b3d, inset 0 -4px 0 rgba(0,0,0,0.15);
+        }
+        @keyframes sway {
+          0%, 100% { transform: translateY(0) rotate(-1deg); }
+          50% { transform: translateY(-6px) rotate(1deg); }
+        }
+        @keyframes sway2 {
+          0%, 100% { transform: translateY(-3px) rotate(1deg); }
+          50% { transform: translateY(3px) rotate(-1deg); }
+        }
+        @keyframes pulseHeart {
+          0%, 100% { transform: scale(1); opacity: 0.9; }
+          50% { transform: scale(1.2); opacity: 1; }
         }
       `}</style>
 
