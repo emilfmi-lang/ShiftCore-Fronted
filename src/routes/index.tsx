@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Heart } from "lucide-react";
+import { Heart, Sparkles, Star } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -14,58 +14,93 @@ export const Route = createFileRoute("/")({
 
 type Heartlet = { id: number; left: number; delay: number; size: number; duration: number };
 
+type Stage = "welcome" | "ask" | "forgiven";
+
 function Index() {
-  const [forgiven, setForgiven] = useState(false);
+  const [stage, setStage] = useState<Stage>("welcome");
   const [noPos, setNoPos] = useState<{ x: number; y: number } | null>(null);
   const [hearts, setHearts] = useState<Heartlet[]>([]);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const noBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const arr: Heartlet[] = Array.from({ length: 18 }).map((_, i) => ({
+    const arr: Heartlet[] = Array.from({ length: 22 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100,
       delay: Math.random() * 6,
-      size: 14 + Math.random() * 28,
-      duration: 7 + Math.random() * 8,
+      size: 14 + Math.random() * 32,
+      duration: 6 + Math.random() * 8,
     }));
     setHearts(arr);
   }, []);
 
-  const dodge = () => {
-    const c = containerRef.current;
-    if (!c) return;
-    const rect = c.getBoundingClientRect();
-    const padding = 90;
-    const x = Math.random() * (rect.width - padding * 2) + padding - rect.width / 2;
-    const y = Math.random() * (rect.height - padding * 2) + padding - rect.height / 2;
-    setNoPos({ x, y });
-  };
+  // Global mouse tracking — No button dodges anywhere on the screen
+  useEffect(() => {
+    if (stage !== "ask") return;
+    const handler = (e: MouseEvent) => {
+      const btn = noBtnRef.current;
+      if (!btn) return;
+      const rect = btn.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const dist = Math.hypot(dx, dy);
+      if (dist < 130) {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        const padX = rect.width / 2 + 20;
+        const padY = rect.height / 2 + 20;
+        // Pick a random safe position anywhere on screen, far from cursor
+        let nx = 0;
+        let ny = 0;
+        for (let i = 0; i < 20; i++) {
+          const tx = padX + Math.random() * (w - padX * 2);
+          const ty = padY + Math.random() * (h - padY * 2);
+          if (Math.hypot(tx - e.clientX, ty - e.clientY) > 220) {
+            nx = tx;
+            ny = ty;
+            break;
+          }
+        }
+        if (nx === 0 && ny === 0) {
+          nx = padX + Math.random() * (w - padX * 2);
+          ny = padY + Math.random() * (h - padY * 2);
+        }
+        setNoPos({ x: nx - rect.width / 2, y: ny - rect.height / 2 });
+      }
+    };
+    window.addEventListener("mousemove", handler);
+    return () => window.removeEventListener("mousemove", handler);
+  }, [stage]);
+
+  const cartoonBg =
+    "radial-gradient(circle at 20% 20%, oklch(0.88 0.15 350) 0%, transparent 40%), radial-gradient(circle at 80% 30%, oklch(0.85 0.18 50) 0%, transparent 45%), radial-gradient(circle at 50% 90%, oklch(0.82 0.16 320) 0%, transparent 50%), linear-gradient(135deg, oklch(0.78 0.16 20) 0%, oklch(0.65 0.22 350) 100%)";
 
   return (
     <div
-      ref={containerRef}
       className="relative min-h-screen overflow-hidden flex items-center justify-center px-4"
-      style={{
-        background:
-          "radial-gradient(ellipse at top, oklch(0.82 0.13 12) 0%, oklch(0.55 0.22 18) 45%, oklch(0.28 0.15 15) 100%)",
-      }}
+      style={{ background: cartoonBg, fontFamily: "'Comic Sans MS', 'Comic Neue', cursive" }}
     >
-      {/* Floating hearts */}
+      {/* Floating hearts & sparkles */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {hearts.map((h) => (
           <Heart
             key={h.id}
-            className="absolute text-white/70 fill-white/40 animate-[float_linear_infinite]"
+            className="absolute text-white fill-rose-300 drop-shadow-lg"
             style={{
               left: `${h.left}%`,
               bottom: `-40px`,
               width: h.size,
               height: h.size,
-              animationDuration: `${h.duration}s`,
+              animation: `float ${h.duration}s linear infinite`,
               animationDelay: `${h.delay}s`,
             }}
           />
         ))}
+        {/* Cartoon clouds */}
+        <div className="absolute top-10 left-10 w-32 h-16 bg-white rounded-full opacity-80 animate-[drift_20s_linear_infinite]" />
+        <div className="absolute top-32 right-20 w-40 h-20 bg-white rounded-full opacity-70 animate-[drift_25s_linear_infinite_reverse]" />
+        <div className="absolute bottom-20 left-1/4 w-36 h-18 bg-white rounded-full opacity-75 animate-[drift_30s_linear_infinite]" />
       </div>
 
       <style>{`
@@ -76,77 +111,148 @@ function Index() {
         }
         @keyframes beat {
           0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.08); }
+          50% { transform: scale(1.15); }
         }
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
+        @keyframes wobble {
+          0%, 100% { transform: rotate(-2deg); }
+          50% { transform: rotate(2deg); }
+        }
+        @keyframes drift {
+          0% { transform: translateX(-100px); }
+          100% { transform: translateX(calc(100vw + 100px)); }
+        }
+        @keyframes pop {
+          0% { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+          60% { transform: scale(1.1) rotate(3deg); }
+          100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+        @keyframes bounce-in {
+          0% { opacity: 0; transform: translateY(50px); }
+          60% { transform: translateY(-10px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .cartoon-card {
+          border: 4px solid #2d1b3d;
+          box-shadow: 8px 8px 0 #2d1b3d;
+        }
+        .cartoon-btn {
+          border: 3px solid #2d1b3d;
+          box-shadow: 4px 4px 0 #2d1b3d;
+          transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .cartoon-btn:hover {
+          transform: translate(-2px, -2px);
+          box-shadow: 6px 6px 0 #2d1b3d;
+        }
+        .cartoon-btn:active {
+          transform: translate(2px, 2px);
+          box-shadow: 2px 2px 0 #2d1b3d;
         }
       `}</style>
 
-      <div
-        className="relative z-10 w-full max-w-xl rounded-3xl bg-white/15 backdrop-blur-xl border border-white/30 shadow-2xl p-8 md:p-12 text-center"
-        style={{ animation: "fadeUp 0.8s ease-out" }}
-      >
-        {!forgiven ? (
-          <>
-            <div className="flex justify-center mb-6">
-              <Heart
-                className="text-white fill-rose-400"
-                size={72}
-                style={{ animation: "beat 1.2s ease-in-out infinite", filter: "drop-shadow(0 0 20px oklch(0.7 0.2 15))" }}
-              />
-            </div>
-
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-snug">
-              Səni üzdüyüm üçün bağışla məni 💔
-            </h1>
-            <p className="text-lg md:text-xl text-white/90 leading-relaxed mb-10">
-              Ümid edirəm ki bağışlayarsan məni, çünki səni çox sevirəm. ❤️
-            </p>
-
-            <div className="relative flex items-center justify-center gap-6 h-20">
-              <button
-                onClick={() => setForgiven(true)}
-                className="px-10 py-4 rounded-full bg-white text-rose-600 font-bold text-lg shadow-lg hover:scale-110 transition-transform duration-200"
-              >
-                Hə 💖
-              </button>
-
-              <button
-                onMouseEnter={dodge}
-                onTouchStart={dodge}
-                onFocus={dodge}
-                onClick={(e) => e.preventDefault()}
-                className="px-10 py-4 rounded-full bg-rose-900/60 text-white font-bold text-lg border border-white/30 transition-transform duration-300 ease-out"
-                style={{
-                  transform: noPos
-                    ? `translate(${noPos.x}px, ${noPos.y}px)`
-                    : "translate(0,0)",
-                }}
-              >
-                Yox
-              </button>
-            </div>
-          </>
-        ) : (
-          <div style={{ animation: "fadeUp 0.7s ease-out" }}>
-            <div className="flex justify-center mb-6">
-              <Heart
-                className="text-white fill-rose-400"
-                size={96}
-                style={{ animation: "beat 0.9s ease-in-out infinite", filter: "drop-shadow(0 0 30px oklch(0.75 0.22 15))" }}
-              />
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Təşəkkür edirəm ❤️
-            </h1>
-            <p className="text-xl text-white/90 leading-relaxed">
-              Səni dünyalar qədər sevirəm. Bir daha səni heç vaxt üzməyəcəm. 💕
-            </p>
+      {stage === "welcome" && (
+        <div
+          className="relative z-10 w-full max-w-xl rounded-3xl bg-yellow-100 cartoon-card p-8 md:p-10 text-center"
+          style={{ animation: "pop 0.6s ease-out" }}
+        >
+          <div className="flex justify-center gap-3 mb-4">
+            <Star className="text-yellow-500 fill-yellow-400" size={40} style={{ animation: "wobble 2s ease-in-out infinite" }} />
+            <Sparkles className="text-pink-500" size={48} style={{ animation: "beat 1.5s ease-in-out infinite" }} />
+            <Star className="text-yellow-500 fill-yellow-400" size={40} style={{ animation: "wobble 2s ease-in-out infinite reverse" }} />
           </div>
-        )}
-      </div>
+          <h1 className="text-4xl md:text-5xl font-black text-rose-700 mb-2" style={{ textShadow: "3px 3px 0 #fff" }}>
+            XOŞ GƏLMİSƏN! 🎉
+          </h1>
+          <p className="text-lg text-purple-900 mb-6 font-bold">Sevgi oyununa başlamazdan əvvəl...</p>
+
+          <div className="bg-white rounded-2xl p-5 mb-6 text-left border-4 border-purple-700" style={{ boxShadow: "5px 5px 0 #6b21a8" }}>
+            <h2 className="text-xl font-black text-purple-800 mb-3 text-center">📜 OYUNUN QAYDALARI 📜</h2>
+            <div className="space-y-3">
+              <div className="flex gap-3 items-start">
+                <span className="text-2xl">1️⃣</span>
+                <p className="text-purple-900 font-semibold">İkisindən birini seçməlisən. Seçimsiz keçid yoxdur!</p>
+              </div>
+              <div className="flex gap-3 items-start">
+                <span className="text-2xl">2️⃣</span>
+                <p className="text-purple-900 font-semibold">Hər hansı seçimi etdikdən sonra ona mütləq şəkildə uymalısan. Uymasan daxil ola bilməyəcəksən! 😤</p>
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setStage("ask")}
+            className="cartoon-btn px-10 py-4 rounded-full bg-gradient-to-r from-pink-400 to-rose-500 text-white font-black text-xl"
+          >
+            QAYDALARI QƏBUL EDİRƏM ✨
+          </button>
+        </div>
+      )}
+
+      {stage === "ask" && (
+        <div
+          className="relative z-10 w-full max-w-xl rounded-3xl bg-pink-100 cartoon-card p-8 md:p-12 text-center"
+          style={{ animation: "bounce-in 0.7s ease-out" }}
+        >
+          <div className="flex justify-center mb-6">
+            <Heart
+              className="text-rose-600 fill-rose-500 drop-shadow-xl"
+              size={80}
+              style={{ animation: "beat 1.2s ease-in-out infinite" }}
+            />
+          </div>
+
+          <h1 className="text-3xl md:text-4xl font-black text-rose-700 mb-4 leading-snug" style={{ textShadow: "2px 2px 0 #fff" }}>
+            Səni üzdüyüm üçün bağışla məni 💔
+          </h1>
+          <p className="text-lg md:text-xl text-purple-900 leading-relaxed mb-10 font-bold">
+            Ümid edirəm ki bağışlayarsan məni, çünki səni çox sevirəm. ❤️
+          </p>
+
+          <div className="flex items-center justify-center gap-6">
+            <button
+              onClick={() => setStage("forgiven")}
+              className="cartoon-btn px-10 py-4 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 text-white font-black text-xl"
+            >
+              HƏ 💖
+            </button>
+          </div>
+
+          {/* No button — fixed positioned, dodges across whole screen */}
+          <button
+            ref={noBtnRef}
+            onClick={(e) => e.preventDefault()}
+            className="cartoon-btn fixed px-10 py-4 rounded-full bg-gradient-to-r from-red-500 to-rose-600 text-white font-black text-xl z-50"
+            style={{
+              left: noPos ? `${noPos.x}px` : "calc(50% + 80px)",
+              top: noPos ? `${noPos.y}px` : "calc(50% + 100px)",
+              transition: "left 0.08s ease-out, top 0.08s ease-out",
+            }}
+          >
+            YOX 😡
+          </button>
+        </div>
+      )}
+
+      {stage === "forgiven" && (
+        <div
+          className="relative z-10 w-full max-w-xl rounded-3xl bg-yellow-100 cartoon-card p-10 md:p-12 text-center"
+          style={{ animation: "pop 0.7s ease-out" }}
+        >
+          <div className="flex justify-center mb-6">
+            <Heart
+              className="text-rose-600 fill-rose-500 drop-shadow-xl"
+              size={110}
+              style={{ animation: "beat 0.9s ease-in-out infinite" }}
+            />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-black text-rose-700 mb-4" style={{ textShadow: "3px 3px 0 #fff" }}>
+            TƏŞƏKKÜR EDİRƏM ❤️
+          </h1>
+          <p className="text-xl text-purple-900 leading-relaxed font-bold">
+            Səni dünyalar qədər sevirəm. Bir daha səni heç vaxt üzməyəcəm. 💕
+          </p>
+        </div>
+      )}
     </div>
   );
 }
