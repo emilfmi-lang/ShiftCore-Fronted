@@ -288,7 +288,7 @@ function Index() {
 
           {/* No button — dodges across whole screen, no click feedback */}
           <div
-            ref={noBtnRef as unknown as React.RefObject<HTMLDivElement>}
+            ref={noBtnRef}
             className="no-btn fixed px-10 py-4 rounded-full bg-gradient-to-r from-red-500 to-rose-600 text-white font-black text-xl z-50 select-none"
             style={{
               left: noPos ? `${noPos.x}px` : "calc(50% + 80px)",
