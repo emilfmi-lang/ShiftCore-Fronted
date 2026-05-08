@@ -308,6 +308,11 @@ function Index() {
           40% { transform: translate(-50%, 30vh) scale(1.6); opacity: 1; }
           100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
         }
+        @keyframes loveRise {
+          0% { transform: translateY(0) scale(0.6) rotate(-10deg); opacity: 0; }
+          15% { opacity: 1; }
+          100% { transform: translateY(-180px) scale(1.1) rotate(15deg); opacity: 0; }
+        }
       `}</style>
 
       {stage === "welcome" && (
