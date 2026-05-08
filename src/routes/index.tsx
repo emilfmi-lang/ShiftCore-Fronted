@@ -21,6 +21,24 @@ function Index() {
   const [noPos, setNoPos] = useState<{ x: number; y: number } | null>(null);
   const [hearts, setHearts] = useState<Heartlet[]>([]);
   const noBtnRef = useRef<HTMLDivElement>(null);
+  const noPlaceholderRef = useRef<HTMLDivElement>(null);
+
+  // When entering ask stage, align YOX button initially with the HƏ button row
+  useEffect(() => {
+    if (stage !== "ask") return;
+    const id = requestAnimationFrame(() => {
+      const ph = noPlaceholderRef.current;
+      const btn = noBtnRef.current;
+      if (!ph || !btn) return;
+      const r = ph.getBoundingClientRect();
+      const br = btn.getBoundingClientRect();
+      setNoPos({
+        x: r.left + r.width / 2 - br.width / 2,
+        y: r.top + r.height / 2 - br.height / 2,
+      });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [stage]);
 
   useEffect(() => {
     const arr: Heartlet[] = Array.from({ length: 22 }).map((_, i) => ({
