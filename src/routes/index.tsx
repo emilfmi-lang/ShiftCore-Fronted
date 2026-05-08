@@ -19,25 +19,16 @@ type Stage = "welcome" | "ask" | "forgiven";
 function Index() {
   const [stage, setStage] = useState<Stage>("welcome");
   const [noPos, setNoPos] = useState<{ x: number; y: number } | null>(null);
+  const [dodging, setDodging] = useState(false);
   const [hearts, setHearts] = useState<Heartlet[]>([]);
   const noBtnRef = useRef<HTMLDivElement>(null);
-  const noPlaceholderRef = useRef<HTMLDivElement>(null);
 
-  // When entering ask stage, align YOX button initially with the HƏ button row
+  // Reset dodging state when leaving ask stage
   useEffect(() => {
-    if (stage !== "ask") return;
-    const id = requestAnimationFrame(() => {
-      const ph = noPlaceholderRef.current;
-      const btn = noBtnRef.current;
-      if (!ph || !btn) return;
-      const r = ph.getBoundingClientRect();
-      const br = btn.getBoundingClientRect();
-      setNoPos({
-        x: r.left + r.width / 2 - br.width / 2,
-        y: r.top + r.height / 2 - br.height / 2,
-      });
-    });
-    return () => cancelAnimationFrame(id);
+    if (stage !== "ask") {
+      setDodging(false);
+      setNoPos(null);
+    }
   }, [stage]);
 
   useEffect(() => {
