@@ -217,6 +217,29 @@ function Index() {
             style={{ filter: "drop-shadow(3px 3px 0 #0f172a)", transition: "all 1.6s ease" }}
           />
         </div>
+
+        {/* Floating love hearts between the couple — only when forgiven */}
+        {stage === "forgiven" && (
+          <div
+            className="absolute pointer-events-none"
+            style={{ bottom: "200px", left: "50%", transform: "translateX(-50%)", width: "120px", height: "200px" }}
+          >
+            {Array.from({ length: 8 }).map((_, i) => (
+              <Heart
+                key={i}
+                className="absolute text-rose-500 fill-rose-400"
+                size={14 + (i % 3) * 6}
+                style={{
+                  left: `${20 + (i * 11) % 80}%`,
+                  bottom: 0,
+                  filter: "drop-shadow(2px 2px 0 #0f172a)",
+                  animation: `loveRise ${2.4 + (i % 4) * 0.4}s ease-in ${i * 0.35}s infinite`,
+                  opacity: 0,
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       <style>{`
