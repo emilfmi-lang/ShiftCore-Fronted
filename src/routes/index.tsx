@@ -21,6 +21,24 @@ function Index() {
   const [noPos, setNoPos] = useState<{ x: number; y: number } | null>(null);
   const [hearts, setHearts] = useState<Heartlet[]>([]);
   const noBtnRef = useRef<HTMLDivElement>(null);
+  const noPlaceholderRef = useRef<HTMLDivElement>(null);
+
+  // When entering ask stage, align YOX button initially with the HƏ button row
+  useEffect(() => {
+    if (stage !== "ask") return;
+    const id = requestAnimationFrame(() => {
+      const ph = noPlaceholderRef.current;
+      const btn = noBtnRef.current;
+      if (!ph || !btn) return;
+      const r = ph.getBoundingClientRect();
+      const br = btn.getBoundingClientRect();
+      setNoPos({
+        x: r.left + r.width / 2 - br.width / 2,
+        y: r.top + r.height / 2 - br.height / 2,
+      });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [stage]);
 
   useEffect(() => {
     const arr: Heartlet[] = Array.from({ length: 22 }).map((_, i) => ({
@@ -45,7 +63,7 @@ function Index() {
       const dx = e.clientX - cx;
       const dy = e.clientY - cy;
       const dist = Math.hypot(dx, dy);
-      if (dist < 130) {
+      if (dist < 200) {
         const w = window.innerWidth;
         const h = window.innerHeight;
         const padX = rect.width / 2 + 20;
@@ -112,7 +130,7 @@ function Index() {
         <div
           className="absolute bottom-0 pointer-events-none"
           style={{
-            left: stage === "forgiven" ? "calc(50% - 150px)" : "1rem",
+            left: stage === "forgiven" ? "calc(50% - 130px)" : "1rem",
             transition: "left 1.6s cubic-bezier(0.6, 0.2, 0.2, 1)",
             animation: stage === "forgiven" ? "none" : "sway 4s ease-in-out infinite",
           }}
@@ -148,7 +166,7 @@ function Index() {
         <div
           className="absolute bottom-0 pointer-events-none"
           style={{
-            left: stage === "forgiven" ? "calc(50% - 10px)" : "auto",
+            left: stage === "forgiven" ? "calc(50% - 30px)" : "auto",
             right: stage === "forgiven" ? "auto" : "1rem",
             transition: "left 1.6s cubic-bezier(0.6, 0.2, 0.2, 1), right 1.6s cubic-bezier(0.6, 0.2, 0.2, 1)",
             animation: stage === "forgiven" ? "none" : "sway2 4s ease-in-out infinite",
@@ -199,6 +217,29 @@ function Index() {
             style={{ filter: "drop-shadow(3px 3px 0 #0f172a)", transition: "all 1.6s ease" }}
           />
         </div>
+
+        {/* Floating love hearts between the couple — only when forgiven */}
+        {stage === "forgiven" && (
+          <div
+            className="absolute pointer-events-none"
+            style={{ bottom: "200px", left: "50%", transform: "translateX(-50%)", width: "120px", height: "200px" }}
+          >
+            {Array.from({ length: 8 }).map((_, i) => (
+              <Heart
+                key={i}
+                className="absolute text-rose-500 fill-rose-400"
+                size={14 + (i % 3) * 6}
+                style={{
+                  left: `${20 + (i * 11) % 80}%`,
+                  bottom: 0,
+                  filter: "drop-shadow(2px 2px 0 #0f172a)",
+                  animation: `loveRise ${2.4 + (i % 4) * 0.4}s ease-in ${i * 0.35}s infinite`,
+                  opacity: 0,
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       <style>{`
@@ -267,6 +308,11 @@ function Index() {
           40% { transform: translate(-50%, 30vh) scale(1.6); opacity: 1; }
           100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
         }
+        @keyframes loveRise {
+          0% { transform: translateY(0) scale(0.6) rotate(-10deg); opacity: 0; }
+          15% { opacity: 1; }
+          100% { transform: translateY(-180px) scale(1.1) rotate(15deg); opacity: 0; }
+        }
       `}</style>
 
       {stage === "welcome" && (
@@ -334,6 +380,15 @@ function Index() {
             >
               HƏ 💖
             </button>
+            {/* Placeholder reserves the slot so YOX initially sits at the same level as HƏ */}
+            <div
+              ref={noPlaceholderRef}
+              aria-hidden
+              className="px-10 py-4 rounded-full text-xl font-black opacity-0 pointer-events-none select-none"
+              style={{ border: "3px solid transparent" }}
+            >
+              YOX 😡
+            </div>
           </div>
 
           {/* No button — dodges across whole screen, no click feedback */}
