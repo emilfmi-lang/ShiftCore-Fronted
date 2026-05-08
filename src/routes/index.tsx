@@ -54,12 +54,11 @@ function Index() {
       const dx = e.clientX - cx;
       const dy = e.clientY - cy;
       const dist = Math.hypot(dx, dy);
-      if (dist < 200) {
+      if (dist < 160) {
         const w = window.innerWidth;
         const h = window.innerHeight;
         const padX = rect.width / 2 + 20;
         const padY = rect.height / 2 + 20;
-        // Pick a random safe position anywhere on screen, far from cursor
         let nx = 0;
         let ny = 0;
         for (let i = 0; i < 20; i++) {
@@ -75,6 +74,7 @@ function Index() {
           nx = padX + Math.random() * (w - padX * 2);
           ny = padY + Math.random() * (h - padY * 2);
         }
+        setDodging(true);
         setNoPos({ x: nx - rect.width / 2, y: ny - rect.height / 2 });
       }
     };
