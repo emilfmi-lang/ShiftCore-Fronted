@@ -19,25 +19,16 @@ type Stage = "welcome" | "ask" | "forgiven";
 function Index() {
   const [stage, setStage] = useState<Stage>("welcome");
   const [noPos, setNoPos] = useState<{ x: number; y: number } | null>(null);
+  const [dodging, setDodging] = useState(false);
   const [hearts, setHearts] = useState<Heartlet[]>([]);
   const noBtnRef = useRef<HTMLDivElement>(null);
-  const noPlaceholderRef = useRef<HTMLDivElement>(null);
 
-  // When entering ask stage, align YOX button initially with the HƏ button row
+  // Reset dodging state when leaving ask stage
   useEffect(() => {
-    if (stage !== "ask") return;
-    const id = requestAnimationFrame(() => {
-      const ph = noPlaceholderRef.current;
-      const btn = noBtnRef.current;
-      if (!ph || !btn) return;
-      const r = ph.getBoundingClientRect();
-      const br = btn.getBoundingClientRect();
-      setNoPos({
-        x: r.left + r.width / 2 - br.width / 2,
-        y: r.top + r.height / 2 - br.height / 2,
-      });
-    });
-    return () => cancelAnimationFrame(id);
+    if (stage !== "ask") {
+      setDodging(false);
+      setNoPos(null);
+    }
   }, [stage]);
 
   useEffect(() => {
@@ -63,12 +54,11 @@ function Index() {
       const dx = e.clientX - cx;
       const dy = e.clientY - cy;
       const dist = Math.hypot(dx, dy);
-      if (dist < 200) {
+      if (dist < 160) {
         const w = window.innerWidth;
         const h = window.innerHeight;
         const padX = rect.width / 2 + 20;
         const padY = rect.height / 2 + 20;
-        // Pick a random safe position anywhere on screen, far from cursor
         let nx = 0;
         let ny = 0;
         for (let i = 0; i < 20; i++) {
@@ -84,6 +74,7 @@ function Index() {
           nx = padX + Math.random() * (w - padX * 2);
           ny = padY + Math.random() * (h - padY * 2);
         }
+        setDodging(true);
         setNoPos({ x: nx - rect.width / 2, y: ny - rect.height / 2 });
       }
     };
@@ -380,31 +371,32 @@ function Index() {
             >
               HƏ 💖
             </button>
-            {/* Placeholder reserves the slot so YOX initially sits at the same level as HƏ */}
+            {!dodging && (
+              <div
+                ref={noBtnRef}
+                className="no-btn px-10 py-4 rounded-full bg-gradient-to-r from-red-500 to-rose-600 text-white font-black text-xl select-none"
+                style={{ cursor: "default", pointerEvents: "none" }}
+              >
+                YOX 😡
+              </div>
+            )}
+          </div>
+
+          {dodging && (
             <div
-              ref={noPlaceholderRef}
-              aria-hidden
-              className="px-10 py-4 rounded-full text-xl font-black opacity-0 pointer-events-none select-none"
-              style={{ border: "3px solid transparent" }}
+              ref={noBtnRef}
+              className="no-btn fixed px-10 py-4 rounded-full bg-gradient-to-r from-red-500 to-rose-600 text-white font-black text-xl z-50 select-none"
+              style={{
+                left: noPos ? `${noPos.x}px` : "calc(50% + 80px)",
+                top: noPos ? `${noPos.y}px` : "calc(50% + 100px)",
+                transition: "left 0.05s linear, top 0.05s linear",
+                cursor: "default",
+                pointerEvents: "none",
+              }}
             >
               YOX 😡
             </div>
-          </div>
-
-          {/* No button — dodges across whole screen, no click feedback */}
-          <div
-            ref={noBtnRef}
-            className="no-btn fixed px-10 py-4 rounded-full bg-gradient-to-r from-red-500 to-rose-600 text-white font-black text-xl z-50 select-none"
-            style={{
-              left: noPos ? `${noPos.x}px` : "calc(50% + 80px)",
-              top: noPos ? `${noPos.y}px` : "calc(50% + 100px)",
-              transition: "left 0.05s linear, top 0.05s linear",
-              cursor: "default",
-              pointerEvents: "none",
-            }}
-          >
-            YOX 😡
-          </div>
+          )}
         </div>
       )}
 
