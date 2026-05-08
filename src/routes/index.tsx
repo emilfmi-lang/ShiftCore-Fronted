@@ -130,7 +130,7 @@ function Index() {
         <div
           className="absolute bottom-0 pointer-events-none"
           style={{
-            left: stage === "forgiven" ? "calc(50% - 150px)" : "1rem",
+            left: stage === "forgiven" ? "calc(50% - 130px)" : "1rem",
             transition: "left 1.6s cubic-bezier(0.6, 0.2, 0.2, 1)",
             animation: stage === "forgiven" ? "none" : "sway 4s ease-in-out infinite",
           }}
