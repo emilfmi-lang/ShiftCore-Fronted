@@ -166,7 +166,7 @@ function Index() {
         <div
           className="absolute bottom-0 pointer-events-none"
           style={{
-            left: stage === "forgiven" ? "calc(50% - 10px)" : "auto",
+            left: stage === "forgiven" ? "calc(50% - 30px)" : "auto",
             right: stage === "forgiven" ? "auto" : "1rem",
             transition: "left 1.6s cubic-bezier(0.6, 0.2, 0.2, 1), right 1.6s cubic-bezier(0.6, 0.2, 0.2, 1)",
             animation: stage === "forgiven" ? "none" : "sway2 4s ease-in-out infinite",
