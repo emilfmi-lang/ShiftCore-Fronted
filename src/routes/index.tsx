@@ -352,6 +352,15 @@ function Index() {
             >
               HƏ 💖
             </button>
+            {/* Placeholder reserves the slot so YOX initially sits at the same level as HƏ */}
+            <div
+              ref={noPlaceholderRef}
+              aria-hidden
+              className="px-10 py-4 rounded-full text-xl font-black opacity-0 pointer-events-none select-none"
+              style={{ border: "3px solid transparent" }}
+            >
+              YOX 😡
+            </div>
           </div>
 
           {/* No button — dodges across whole screen, no click feedback */}
