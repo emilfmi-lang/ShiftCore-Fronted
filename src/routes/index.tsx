@@ -63,7 +63,7 @@ function Index() {
       const dx = e.clientX - cx;
       const dy = e.clientY - cy;
       const dist = Math.hypot(dx, dy);
-      if (dist < 130) {
+      if (dist < 200) {
         const w = window.innerWidth;
         const h = window.innerHeight;
         const padX = rect.width / 2 + 20;
