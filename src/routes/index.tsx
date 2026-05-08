@@ -371,31 +371,32 @@ function Index() {
             >
               HƏ 💖
             </button>
-            {/* Placeholder reserves the slot so YOX initially sits at the same level as HƏ */}
+            {!dodging && (
+              <div
+                ref={noBtnRef}
+                className="no-btn px-10 py-4 rounded-full bg-gradient-to-r from-red-500 to-rose-600 text-white font-black text-xl select-none"
+                style={{ cursor: "default", pointerEvents: "none" }}
+              >
+                YOX 😡
+              </div>
+            )}
+          </div>
+
+          {dodging && (
             <div
-              ref={noPlaceholderRef}
-              aria-hidden
-              className="px-10 py-4 rounded-full text-xl font-black opacity-0 pointer-events-none select-none"
-              style={{ border: "3px solid transparent" }}
+              ref={noBtnRef}
+              className="no-btn fixed px-10 py-4 rounded-full bg-gradient-to-r from-red-500 to-rose-600 text-white font-black text-xl z-50 select-none"
+              style={{
+                left: noPos ? `${noPos.x}px` : "calc(50% + 80px)",
+                top: noPos ? `${noPos.y}px` : "calc(50% + 100px)",
+                transition: "left 0.05s linear, top 0.05s linear",
+                cursor: "default",
+                pointerEvents: "none",
+              }}
             >
               YOX 😡
             </div>
-          </div>
-
-          {/* No button — dodges across whole screen, no click feedback */}
-          <div
-            ref={noBtnRef}
-            className="no-btn fixed px-10 py-4 rounded-full bg-gradient-to-r from-red-500 to-rose-600 text-white font-black text-xl z-50 select-none"
-            style={{
-              left: noPos ? `${noPos.x}px` : "calc(50% + 80px)",
-              top: noPos ? `${noPos.y}px` : "calc(50% + 100px)",
-              transition: "left 0.05s linear, top 0.05s linear",
-              cursor: "default",
-              pointerEvents: "none",
-            }}
-          >
-            YOX 😡
-          </div>
+          )}
         </div>
       )}
 
