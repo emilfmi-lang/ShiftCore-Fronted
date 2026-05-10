@@ -1,29 +1,16 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Heart, Sparkles, Star } from "lucide-react";
 
-export const Route = createFileRoute("/")({
-  component: Index,
-  head: () => ({
-    meta: [
-      { title: "Bağışla məni 💔" },
-      { name: "description", content: "Səni çox sevirəm, bağışla məni." },
-    ],
-  }),
-});
-
 type Heartlet = { id: number; left: number; delay: number; size: number; duration: number };
-
 type Stage = "welcome" | "ask" | "forgiven";
 
-function Index() {
+export default function App() {
   const [stage, setStage] = useState<Stage>("welcome");
   const [noPos, setNoPos] = useState<{ x: number; y: number } | null>(null);
   const [dodging, setDodging] = useState(false);
   const [hearts, setHearts] = useState<Heartlet[]>([]);
   const noBtnRef = useRef<HTMLDivElement>(null);
 
-  // Reset dodging state when leaving ask stage
   useEffect(() => {
     if (stage !== "ask") {
       setDodging(false);
@@ -42,7 +29,6 @@ function Index() {
     setHearts(arr);
   }, []);
 
-  // Global mouse tracking — No button dodges anywhere on the screen
   useEffect(() => {
     if (stage !== "ask") return;
     const handler = (e: MouseEvent) => {
@@ -90,7 +76,6 @@ function Index() {
       className="relative min-h-screen overflow-hidden flex items-center justify-center px-4"
       style={{ background: cartoonBg, fontFamily: "'Comic Sans MS', 'Comic Neue', cursive" }}
     >
-      {/* Floating hearts & sparkles */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {hearts.map((h) => (
           <Heart
@@ -106,18 +91,15 @@ function Index() {
             }}
           />
         ))}
-        {/* Cartoon clouds */}
         <div className="absolute top-10 left-10 w-32 h-16 bg-white rounded-full opacity-80 animate-[drift_20s_linear_infinite]" style={{ filter: "drop-shadow(0 6px 0 rgba(0,0,0,0.15))" }} />
         <div className="absolute top-32 right-20 w-40 h-20 bg-white rounded-full opacity-70 animate-[drift_25s_linear_infinite_reverse]" style={{ filter: "drop-shadow(0 6px 0 rgba(0,0,0,0.15))" }} />
         <div className="absolute bottom-32 left-1/4 w-36 h-16 bg-white rounded-full opacity-75 animate-[drift_30s_linear_infinite]" style={{ filter: "drop-shadow(0 6px 0 rgba(0,0,0,0.15))" }} />
 
-        {/* Sun */}
         <div className="absolute top-8 right-8 w-24 h-24 rounded-full" style={{
           background: "radial-gradient(circle, #fef08a 30%, #fbbf24 70%)",
           boxShadow: "0 0 60px #fbbf24, 0 0 100px rgba(251,191,36,0.4)",
         }} />
 
-        {/* Couple silhouettes */}
         <div
           className="absolute bottom-0 pointer-events-none"
           style={{
@@ -131,7 +113,6 @@ function Index() {
             <rect x="55" y="160" width="14" height="70" rx="6" fill="#1e3a8a" stroke="#0f172a" strokeWidth="3" />
             <rect x="71" y="160" width="14" height="70" rx="6" fill="#1e3a8a" stroke="#0f172a" strokeWidth="3" />
             <path d="M40 100 Q40 85 55 80 L85 80 Q100 85 100 100 L100 165 L40 165 Z" fill="#3b82f6" stroke="#0f172a" strokeWidth="3" />
-            {/* Right arm — extends when hugging */}
             {stage === "forgiven" ? (
               <path d="M100 105 Q140 100 158 115 L158 130 Q140 122 100 125 Z" fill="#3b82f6" stroke="#0f172a" strokeWidth="3" />
             ) : (
@@ -168,7 +149,6 @@ function Index() {
             <rect x="58" y="160" width="11" height="70" rx="5" fill="#fce7f3" stroke="#0f172a" strokeWidth="3" />
             <rect x="71" y="160" width="11" height="70" rx="5" fill="#fce7f3" stroke="#0f172a" strokeWidth="3" />
             <path d="M42 95 Q42 82 55 78 L85 78 Q98 82 98 95 L110 170 L30 170 Z" fill="#ec4899" stroke="#0f172a" strokeWidth="3" />
-            {/* Left arm — extends when hugging */}
             {stage === "forgiven" ? (
               <path d="M42 105 Q2 100 -16 115 L-16 130 Q2 122 42 125 Z" fill="#ec4899" stroke="#0f172a" strokeWidth="3" />
             ) : (
@@ -191,7 +171,6 @@ function Index() {
           </svg>
         </div>
 
-        {/* Heart between them */}
         <div
           className="absolute pointer-events-none"
           style={{
@@ -209,7 +188,6 @@ function Index() {
           />
         </div>
 
-        {/* Floating love hearts between the couple — only when forgiven */}
         {stage === "forgiven" && (
           <div
             className="absolute pointer-events-none"
